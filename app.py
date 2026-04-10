@@ -238,6 +238,14 @@ if ticker:
         xaxis_title="Date", template="plotly_white", height=400
     )
     st.plotly_chart(fig_roll_vol, width="stretch")
+    csv = df.to_csv().encode("utf-8")
+   # -- Download ------------------------------
+    st.download_button(
+        label="⬇️ Download Data as CSV",
+        data=csv,
+        file_name=f"{ticker}_data.csv",
+        mime="text/csv"
+)
     # -- Raw data (expandable) ----------------------------
     with st.expander("View Raw Data"):
         st.dataframe(df.tail(60), width="stretch")
