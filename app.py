@@ -30,7 +30,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("Stock Analysis Dashboard")
-st.title("Stock Analysis Dashboard")
+
 
 # -- Sidebar: user inputs --------------------------------
 st.sidebar.header("Settings")
