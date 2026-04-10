@@ -24,8 +24,14 @@ ticker = st.sidebar.text_input("Stock Ticker", value="AAPL").upper().strip()
 
 # Default date range: one year back from today
 default_start = date.today() - timedelta(days=365)
-start_date = st.sidebar.date_input("Start Date", value=default_start, min_value=date(1970, 1, 1))
-end_date = st.sidebar.date_input("End Date", value=date.today(),min_value=date(1970, 1, 1))
+start_date = st.sidebar.date_input("Start Date", value=default_start, min_value=date(2003, 8, 25))
+end_date = st.sidebar.date_input("End Date", value=date.today(),min_value=date(2003, 8, 25))
+
+# Let the user pick a moving-average window
+ma_window = st.sidebar.slider(
+    "Moving Average Window (days)", min_value=5, max_value=200, value=50, step=5
+)
+
 
 # Validate that the date range makes sense
 if start_date >= end_date:
@@ -69,6 +75,13 @@ if ticker:
 
     # -- Compute a derived column -------------------------
     df["Daily Return"] = df["Close"].pct_change()
+    df[f"{ma_window}-Day MA"] = df["Close"].rolling(window=ma_window).mean()
+    if ma_window > len(df):
+        st.warning(
+            f"The selected {ma_window}-day window is longer than the "
+            f"available data ({len(df)} trading days). The moving average "
+            "line won't appear — try a shorter window or a wider date range."
+        )
 
     # -- Key metrics --------------------------------------
     latest_close = float(df["Close"].iloc[-1])
@@ -92,7 +105,7 @@ if ticker:
     st.divider()
 
     # -- Price chart --------------------------------------
-    st.subheader("Closing Price")
+    st.subheader("Price & Moving Average")
 
     fig = go.Figure()
     fig.add_trace(
@@ -100,6 +113,13 @@ if ticker:
             x=df.index, y=df["Close"],
             mode="lines", name="Close Price",
             line=dict(width=1.5)
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=df.index, y=df[f"{ma_window}-Day MA"],
+            mode="lines", name=f"{ma_window}-Day MA",
+            line=dict(width=2, dash="dash")
         )
     )
     fig.update_layout(
