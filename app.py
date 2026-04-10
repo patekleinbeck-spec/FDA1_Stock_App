@@ -17,6 +17,19 @@ from scipy import stats
 # st.set_page_config must be the FIRST Streamlit command in the script.
 # If you add any other st.* calls above this line, you'll get an error.
 st.set_page_config(page_title="Stock Analyzer", layout="wide")
+# -- Custom styling --
+st.markdown("""
+    <style>
+    [data-testid="metric-container"] {
+        background-color: #1A1F2E;
+        border: 1px solid #2E3450;
+        border-radius: 8px;
+        padding: 15px;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+st.title("Stock Analysis Dashboard")
 st.title("Stock Analysis Dashboard")
 
 # -- Sidebar: user inputs --------------------------------
@@ -148,7 +161,7 @@ if ticker:
     )
     fig.update_layout(
         yaxis_title="Price (USD)", xaxis_title="Date",
-        template="plotly_white", height=450
+        template="plotly_dark", height=450
     )
     st.plotly_chart(fig, width="stretch")
  # -- Volume chart -------------------------------------
