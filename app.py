@@ -35,7 +35,7 @@ st.sidebar.header(" Settings")
  
 raw_input = st.sidebar.text_input(
     "Stock Tickers (2–5, comma-separated)",
-    value="NUE, STLD, ZEUS"
+    value="NUE, STLD, RS"
 )
  
 default_start = date.today() - timedelta(days=365 * 2)
